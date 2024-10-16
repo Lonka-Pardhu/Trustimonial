@@ -1,3 +1,4 @@
+"use server";
 import { auth, signIn, signOut } from "@/auth";
 import Link from "next/link";
 import { Button } from "./button";
