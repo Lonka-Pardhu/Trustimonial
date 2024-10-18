@@ -11,7 +11,7 @@ function SignOut() {
     <form
       action={async () => {
         "use server";
-        await signOut();
+        await signOut({ redirectTo: "/" });
       }}
     >
       <Button type="submit">Sign out</Button>
@@ -21,7 +21,7 @@ function SignOut() {
 
 const Header = async (props: Props) => {
   const session = await auth();
-  console.log(session);
+
   return (
     <header>
       <nav className="w-full p-2 flex flex-row items-center justify-between mx-auto border-b border-1">
@@ -45,7 +45,7 @@ const Header = async (props: Props) => {
             </div>
           ) : (
             <Link href="/auth/signin">
-              <Button>Sign In</Button>
+              <Button className="bg-white text-black">Sign In</Button>
             </Link>
           )}
         </div>

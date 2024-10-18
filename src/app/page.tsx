@@ -1,19 +1,19 @@
-import Image from "next/image";
-import Header from "@/components/ui/header";
-import { Button } from "@/components/ui/button";
-import { SessionProvider } from "next-auth/react";
-import ClientComponent from "@/components/ClientComponent";
+"use client";
 
-export default function Home() {
+import { signIn } from "next-auth/react";
+import { Button } from "@/components/ui/button";
+
+export default function SignInPage() {
   return (
-    <SessionProvider>
-      <div>
-        <Header />
-        <div className="h-screen w-full flex items-center justify-center">
-          {/* <h1>Work in progress...</h1> */}
-          <ClientComponent />
-        </div>
-      </div>
-    </SessionProvider>
+    <div className="min-h-screen flex flex-col items-center justify-center p-4">
+      <h1 className="text-4xl mb-8">Sign In to Your Account</h1>
+
+      <Button
+        onClick={() => signIn("google", { callbackUrl: "/dashboard" })}
+        className="bg-blue-500 text-white p-4 rounded"
+      >
+        Sign In with Google
+      </Button>
+    </div>
   );
 }
