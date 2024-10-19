@@ -1,19 +1,44 @@
 "use client";
 
-import { signIn } from "next-auth/react";
+import { signIn, useSession } from "next-auth/react";
 import { Button } from "@/components/ui/button";
+import { useRouter } from "next/navigation";
+import { useEffect } from "react";
+import { LoaderCircle } from "lucide-react";
 
 export default function SignInPage() {
-  return (
-    <div className="min-h-screen flex flex-col items-center justify-center p-4">
-      <h1 className="text-4xl mb-8">Sign In to Your Account</h1>
+  const { status } = useSession();
+  const router = useRouter();
 
-      <Button
-        onClick={() => signIn("google", { callbackUrl: "/dashboard" })}
-        className="bg-blue-500 text-white p-4 rounded"
-      >
-        Sign In with Google
-      </Button>
-    </div>
-  );
+  useEffect(() => {
+    if (status === "authenticated") {
+      // Redirect to dashboard if user is already authenticated
+      router.replace("/dashboard");
+    }
+  }, [status, router]);
+
+  // Show a loading spinner or message while session is being checked
+  if (status === "loading") {
+    return (
+      <div className="h-screen w-full flex items-center justify-center">
+        <div>
+          <p className="flex items-center">
+            Loading...
+            <LoaderCircle className="animate-spin" />
+          </p>
+        </div>
+      </div>
+    );
+  } else if (status === "unauthenticated") {
+    return (
+      <div className="min-h-screen flex flex-col items-center justify-center p-4">
+        <Button
+          type="button"
+          onClick={() => signIn("google", { callbackUrl: "/dashboard" })}
+        >
+          Sign In with Google
+        </Button>
+      </div>
+    );
+  }
 }
