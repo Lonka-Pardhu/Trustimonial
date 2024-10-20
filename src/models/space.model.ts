@@ -3,6 +3,10 @@ import { model, models, Schema } from "mongoose";
 const spaceSchema = new Schema(
   {
     spaceName: { type: String, required: true },
+    spaceUrlKey: {
+      type: String,
+      required: true,
+    },
     spaceOwner: {
       type: Schema.Types.ObjectId,
       ref: "User",
