@@ -1,6 +1,7 @@
 import { auth } from "@/auth";
 import CreateSpaceForm from "@/components/CreateSpaceForm";
-import Header from "@/components/ui/header";
+import SpaceCard from "@/components/SpaceCard";
+import Header from "@/components/header";
 import { SessionProvider } from "next-auth/react";
 import { redirect } from "next/navigation";
 import React from "react";
@@ -13,8 +14,15 @@ const Dashboard = async () => {
     <SessionProvider>
       <div>
         <Header />
-        <div className="h-screen w-full flex items-center justify-center">
-          {/* <h1>Work in progress...</h1> */}
+        <div className="p-2">
+          <div className="mt-2">
+            <h2 className="scroll-m-20 pb-2 text-3xl font-semibold tracking-tight first:mt-0">
+              Your Spaces
+            </h2>
+            {/* <div className="flex flex-row items-center w-full gap-x-1"> */}
+            <SpaceCard />
+            {/* </div> */}
+          </div>
           <CreateSpaceForm />
         </div>
       </div>

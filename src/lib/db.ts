@@ -36,6 +36,8 @@ if (process.env.NODE_ENV === "development") {
 // separate module, the client can be shared across functions.
 export default client;
 
+// DB Connection
+// Global cache for Mongoose connection
 let cached = global.mongoose;
 
 if (!cached) {
@@ -45,22 +47,29 @@ if (!cached) {
 export async function dbConnect() {
   if (cached.conn) {
     console.log("DB Connection exists.!");
-    return cached.conn;
+    return cached.conn; // Returning existing connection
   }
   if (!cached.promise) {
     const opts = {
       bufferCommands: false,
     };
+    // Createing connection promise and caching it
     cached.promise = mongoose.connect(uri, opts).then((mongoose) => {
       return mongoose;
     });
   }
   try {
+    // Await the promise and store the connection
     cached.conn = await cached.promise;
   } catch (e) {
+    // Reseting the promise if connection fails.
     cached.promise = null;
     throw e;
   }
 
-  return cached.conn;
+  return cached.conn; // Returning the successful connection
 }
+
+// bufferCommands: false: Prevents buffering MongoDB operations when Mongoose isn't connected. If the connection is lost, Mongoose won't queue up database operations.
+
+// Connection Reuse: If the connection is already established, it returns the existing one. This is ideal for minimizing the overhead of multiple connections, especially during development
