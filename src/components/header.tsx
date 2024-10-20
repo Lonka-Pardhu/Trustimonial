@@ -1,15 +1,11 @@
 "use server";
-import { auth, signIn, signOut } from "@/auth";
-import Link from "next/link";
-import { Button } from "./ui/button";
-import Image from "next/image";
+import { auth } from "@/auth";
 import UserNav from "./UserNav";
 
 type Props = {};
 
 const Header = async (props: Props) => {
   const session = await auth();
-  console.log(session);
 
   return (
     <header>

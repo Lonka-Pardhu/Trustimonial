@@ -29,6 +29,9 @@ const CreateSpaceForm = () => {
     reset,
   } = useForm();
   const [spaceDailogOpen, setSpaceDailogOpen] = useState(false);
+  const [linkDailogOpen, setLinkDailogOpen] = useState(true);
+  const [spaceLink, setSpaceLink] = useState("");
+
   const [questions, setQuestions] = useState(["", "", ""]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
@@ -45,12 +48,13 @@ const CreateSpaceForm = () => {
       });
 
       if (res.status === 201) {
-        setSpaceDailogOpen(false);
+        console.log(res);
         reset();
+        setSpaceDailogOpen(false);
         toast.success("Space has been created");
       }
     } catch (error: any) {
-      console.log(error.response);
+      console.log(error);
       if (error.response) {
         setError(error.response.data.message || "Failed to create space");
       } else {
@@ -146,6 +150,12 @@ const CreateSpaceForm = () => {
           </form>
         </DialogContent>
       </Dialog>
+      {/* <Dialog open={linkDailogOpen}>
+        <DialogContent className="sm:max-w-[425px">
+          <p>Space created successfully!</p>
+          <Input disabled></Input>
+        </DialogContent>
+      </Dialog> */}
     </>
   );
 };
