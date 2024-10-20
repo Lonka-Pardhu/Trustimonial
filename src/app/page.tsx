@@ -15,9 +15,8 @@ export default function SignInPage() {
       // Redirect to dashboard if user is already authenticated
       router.replace("/dashboard");
     }
-  }, [status, router]);
+  }, []);
 
-  // Show a loading spinner or message while session is being checked
   if (status === "loading") {
     return (
       <div className="h-screen w-full flex items-center justify-center">
@@ -27,16 +26,17 @@ export default function SignInPage() {
         </div>
       </div>
     );
-  } else if (status === "unauthenticated") {
-    return (
-      <div className="min-h-screen flex flex-col items-center justify-center p-4">
-        <Button
-          type="button"
-          onClick={() => signIn("google", { callbackUrl: "/dashboard" })}
-        >
-          Sign In with Google
-        </Button>
-      </div>
-    );
   }
+
+  // If user is unauthenticated, show sign-in button
+  return (
+    <div className="min-h-screen flex flex-col items-center justify-center p-4">
+      <Button
+        type="button"
+        onClick={() => signIn("google", { callbackUrl: "/dashboard" })}
+      >
+        Sign In with Google
+      </Button>
+    </div>
+  );
 }
