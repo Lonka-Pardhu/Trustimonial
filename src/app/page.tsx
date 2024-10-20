@@ -21,11 +21,9 @@ export default function SignInPage() {
   if (status === "loading") {
     return (
       <div className="h-screen w-full flex items-center justify-center">
-        <div>
-          <p className="flex items-center">
-            Loading...
-            <LoaderCircle className="animate-spin" />
-          </p>
+        <div className="flex items-center p-2 rounded-lg text-white bg-black">
+          <p>Loading...</p>
+          <LoaderCircle className="animate-spin" />
         </div>
       </div>
     );

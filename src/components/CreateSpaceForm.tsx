@@ -5,8 +5,10 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
-import { Card } from "@/components/ui/card";
+import { Card, CardHeader } from "@/components/ui/card";
 import { CardContent } from "@/components/ui/card";
+import { LoaderCircle } from "lucide-react";
+import axios from "axios";
 
 const CreateSpaceForm = () => {
   const {
@@ -14,15 +16,41 @@ const CreateSpaceForm = () => {
     handleSubmit,
     watch,
     formState: { errors },
+    reset,
   } = useForm();
-  const [questions, setQuestions] = useState(["", "", ""]);
 
-  const onSubmit = (data: any) => {
-    // Process form submission
-    console.log(data);
+  const [questions, setQuestions] = useState(["", "", ""]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+
+  const onSubmit = async (data: any) => {
+    setLoading(true);
+    setError("");
+
+    try {
+      const res = await axios.post("/api/space", data, {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+
+      if (res.status === 201) {
+        console.log(res.data);
+        reset();
+      }
+    } catch (error: any) {
+      console.log(error.response);
+      if (error.response) {
+        setError(error.response.data.message || "Failed to create space");
+      } else {
+        setError("Network error or server unreachable");
+      }
+    } finally {
+      setLoading(false);
+    }
   };
 
-  const handleQuestionChange = (index: any, value: any) => {
+  const handleQuestionChange = (index: number, value: string) => {
     const updatedQuestions = [...questions];
     updatedQuestions[index] = value;
     setQuestions(updatedQuestions);
@@ -30,6 +58,9 @@ const CreateSpaceForm = () => {
 
   return (
     <Card className="w-[350px]">
+      <CardHeader>
+        <p className="text-red-500">{error}</p>
+      </CardHeader>
       <CardContent className="w-full pt-2">
         <form onSubmit={handleSubmit(onSubmit)} className="space-form">
           <div className="flex flex-col gap-y-1">
@@ -84,7 +115,9 @@ const CreateSpaceForm = () => {
                 </small>
               )}
             </div>
-            <Button type="submit">Submit</Button>
+            <Button disabled={loading} type="submit">
+              {loading ? <LoaderCircle className="animate-spin" /> : "Submit"}
+            </Button>
           </div>
         </form>
       </CardContent>
