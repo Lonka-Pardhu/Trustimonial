@@ -46,13 +46,8 @@ export async function POST(req: Request) {
       message,
       questions,
     };
-    // Log 2: Check what we're trying to save
-    console.log("Attempting to save space:", newSpace);
 
     const space = await Space.create(newSpace);
-
-    // Log 3: Check what was actually saved
-    console.log("Saved space:", space.toObject());
 
     await User.updateOne(
       { _id: session.user.id }, // Finding the user by their ID
@@ -97,6 +92,49 @@ export async function GET(req: Request) {
   } catch (error) {
     return NextResponse.json(
       { message: "Failed to fetch spaces", error },
+      { status: 500 }
+    );
+  }
+}
+
+export async function DELETE(req: Request) {
+  const session = await auth();
+
+  if (!session || !session.user) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+
+  try {
+    const { spaceId } = await req.json();
+
+    if (!spaceId) {
+      return NextResponse.json(
+        { message: "Space id is required" },
+        { status: 400 }
+      );
+    }
+    await dbConnect();
+
+    const deletedSpace = await Space.deleteOne({
+      _id: spaceId,
+    });
+
+    if (!deletedSpace) {
+      return NextResponse.json(
+        {
+          message: "Space not found or you are not authorized",
+        },
+        { status: 404 }
+      );
+    }
+    return NextResponse.json(
+      { message: "Space deleted successfully" },
+      { status: 200 }
+    );
+  } catch (error) {
+    console.log(error);
+    return NextResponse.json(
+      { message: "Failed to delete space" },
       { status: 500 }
     );
   }
