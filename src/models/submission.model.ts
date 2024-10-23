@@ -23,4 +23,6 @@ const submissionSchema = new Schema(
   { timestamps: true }
 );
 
-export default models.Submission || model("Submission", submissionSchema);
+const Submission = models.Submission || model("Submission", submissionSchema);
+
+export default Submission;

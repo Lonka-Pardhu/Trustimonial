@@ -29,6 +29,7 @@ const CreateSpaceForm = () => {
     formState: { errors },
     reset,
   } = useForm();
+
   const [isCopied, setIsCopied] = useState(false);
   const [spaceDailogOpen, setSpaceDailogOpen] = useState(false);
   const [linkDailogOpen, setLinkDailogOpen] = useState(false);

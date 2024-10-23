@@ -8,11 +8,6 @@ export async function GET(
   { params }: { params: Promise<{ spaceKey: string }> }
 ) {
   const spaceKey = (await params).spaceKey;
-  const session = await auth();
-
-  if (!session || !session.user) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  }
 
   try {
     await dbConnect();
@@ -25,7 +20,7 @@ export async function GET(
         { status: 404 }
       );
     }
-    return NextResponse.json({ space }, { status: 200 });
+    return NextResponse.json({ space }, { status: 201 });
   } catch (error) {
     console.log("ERROR>>>", error);
     return NextResponse.json(
