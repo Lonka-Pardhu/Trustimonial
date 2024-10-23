@@ -10,6 +10,7 @@ import { Label } from "@/components/ui/label";
 import { Card, CardHeader } from "@/components/ui/card";
 import { CardContent } from "@/components/ui/card";
 import { LoaderCircle } from "lucide-react";
+import { Copy } from "lucide-react";
 import {
   Dialog,
   DialogContent,
@@ -28,10 +29,11 @@ const CreateSpaceForm = () => {
     formState: { errors },
     reset,
   } = useForm();
-  const [spaceDailogOpen, setSpaceDailogOpen] = useState(false);
-  const [linkDailogOpen, setLinkDailogOpen] = useState(true);
-  const [spaceLink, setSpaceLink] = useState("");
 
+  const [isCopied, setIsCopied] = useState(false);
+  const [spaceDailogOpen, setSpaceDailogOpen] = useState(false);
+  const [linkDailogOpen, setLinkDailogOpen] = useState(false);
+  const [spaceLink, setSpaceLink] = useState("");
   const [questions, setQuestions] = useState(["", "", ""]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
@@ -48,9 +50,10 @@ const CreateSpaceForm = () => {
       });
 
       if (res.status === 201) {
-        console.log(res);
+        setSpaceLink(`http://localhost:3000/${res.data.url}`);
         reset();
         setSpaceDailogOpen(false);
+        setLinkDailogOpen(true);
         toast.success("Space has been created");
       }
     } catch (error: any) {
@@ -69,6 +72,12 @@ const CreateSpaceForm = () => {
     const updatedQuestions = [...questions];
     updatedQuestions[index] = value;
     setQuestions(updatedQuestions);
+  };
+
+  const handleCopy = () => {
+    navigator.clipboard.writeText(spaceLink);
+    setIsCopied(true);
+    setTimeout(() => setIsCopied(false), 3000);
   };
 
   return (
@@ -150,12 +159,24 @@ const CreateSpaceForm = () => {
           </form>
         </DialogContent>
       </Dialog>
-      {/* <Dialog open={linkDailogOpen}>
+      <Dialog open={linkDailogOpen} onOpenChange={setLinkDailogOpen}>
         <DialogContent className="sm:max-w-[425px">
-          <p>Space created successfully!</p>
-          <Input disabled></Input>
+          <DialogHeader>
+            <DialogTitle>Space created successfully!</DialogTitle>
+          </DialogHeader>
+          <div className="flex flex-row items-center w-full gap-x-2">
+            <p className="p-2 border rounded-md w-full">{spaceLink}</p>
+            <Button
+              variant="secondary"
+              className="flex items-center gap-x-1"
+              onClick={handleCopy}
+            >
+              <Copy className="w-4 h-4" />
+              {isCopied ? "Copied" : "Copy"}
+            </Button>
+          </div>
         </DialogContent>
-      </Dialog> */}
+      </Dialog>
     </>
   );
 };

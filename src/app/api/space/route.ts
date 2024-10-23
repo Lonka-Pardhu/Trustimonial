@@ -76,6 +76,7 @@ export async function GET(req: Request) {
   if (!session || !session.user) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
+
   try {
     await dbConnect();
 

@@ -2,6 +2,8 @@ import { auth } from "@/auth";
 import CreateSpaceForm from "@/components/CreateSpaceForm";
 import SpaceCard from "@/components/SpaceCard";
 import Header from "@/components/header";
+import { Button } from "@/components/ui/button";
+import axios from "axios";
 import { SessionProvider } from "next-auth/react";
 import { redirect } from "next/navigation";
 import React from "react";
