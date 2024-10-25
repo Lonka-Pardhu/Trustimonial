@@ -7,6 +7,7 @@ const spaceSchema = new Schema(
       type: String,
       required: true,
     },
+    
     spaceOwner: {
       type: Schema.Types.ObjectId,
       ref: "User",

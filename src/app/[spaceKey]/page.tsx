@@ -22,6 +22,7 @@ interface Space {
   spaceName: string;
   title: string;
   message: string;
+  spaceUrlKey: string;
   questions: string[];
 }
 
@@ -57,11 +58,15 @@ const SpaceFormPage = ({ params }: { params: { spaceKey: string } }) => {
         ...data,
         spaceId: space?._id, // Include the spaceId in the form data
       };
-      const res = await axios.post("/api/submitReview", formData, {
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
+      const res = await axios.post(
+        `/api/submission/${params.spaceKey}`,
+        formData,
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
 
       if (res.status === 201) {
         console.log(res);

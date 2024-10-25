@@ -1,17 +1,48 @@
+import { auth } from "@/auth";
 import { dbConnect } from "@/lib/db";
 import Space from "@/models/space.model";
 import Submission from "@/models/submission.model";
 import { NextResponse } from "next/server";
 
-export async function POST(req: Request) {
+export async function GET(
+  req: Request,
+  { params }: { params: Promise<{ boardName: string }> }
+) {
+  const session = await auth();
+  const boardName = (await params).boardName;
+
+  if (!session || !session.user) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+  try {
+    await dbConnect();
+    const submissions = await Submission.find({ spaceUrlKey: boardName });
+    return NextResponse.json(
+      { message: "submissions fetched", submissions },
+      {
+        status: 200,
+      }
+    );
+  } catch (error) {
+    console.log(error);
+    return NextResponse.json({ message: "cant find submissions", error });
+  }
+}
+
+export async function POST(
+  req: Request,
+  { params }: { params: Promise<{ boardName: string }> }
+) {
+  const boardName = (await params).boardName;
+
   try {
     await dbConnect(); // Ensure the database is connected
 
     const { spaceId, name, email, description } = await req.json();
-    console.log(spaceId, name, email, description);
 
     // Create the new submission
     const newSubmission = await Submission.create({
+      spaceUrlKey: boardName,
       spaceId,
       name,
       email,
