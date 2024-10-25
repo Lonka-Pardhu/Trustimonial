@@ -7,6 +7,10 @@ const submissionSchema = new Schema(
       ref: "Space",
       required: true,
     },
+    spaceUrlKey: {
+      type: String,
+      required: true,
+    },
     name: {
       type: String,
       required: true,
