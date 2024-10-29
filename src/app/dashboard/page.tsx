@@ -6,7 +6,8 @@ import { Button } from "@/components/ui/button";
 import axios from "axios";
 import { SessionProvider } from "next-auth/react";
 import { redirect } from "next/navigation";
-import React from "react";
+import React, { useEffect } from "react";
+import EmbedCarousel from "@/components/EmbedCarousel";
 
 const Dashboard = async () => {
   const session = await auth();
@@ -27,6 +28,7 @@ const Dashboard = async () => {
           </div>
           <CreateSpaceForm />
         </div>
+        <EmbedCarousel />
       </div>
     </SessionProvider>
   );

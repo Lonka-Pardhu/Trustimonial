@@ -15,7 +15,6 @@ const SpaceCard = () => {
       try {
         const res = await axios.get(`/api/space`);
         if (res?.status === 200) {
-          console.log(res.data.spaces);
           setSpaces(res.data.spaces);
         }
       } catch (error) {
@@ -45,11 +44,8 @@ const SpaceCard = () => {
       {spaces &&
         spaces.map((item, index) => {
           return (
-            <Link href={`/boards/${item.spaceUrlKey}`}>
-              <Card
-                key={index}
-                className="w-[200px] text-white bg-[#25282C] h-auto shadow-md broder-[#33363A] border transition-shadow duration-300 cursor-pointer hover:shadow-lg hover:shadow-gray-400"
-              >
+            <Link key={index} href={`/boards/${item.spaceUrlKey}`}>
+              <Card className="w-[200px] text-white bg-[#25282C] h-auto shadow-md broder-[#33363A] border transition-shadow duration-300 cursor-pointer hover:shadow-lg hover:shadow-gray-400">
                 <CardHeader className="flex flex-row items-center justify-between">
                   <p>{item.spaceName}</p>
                   <Button

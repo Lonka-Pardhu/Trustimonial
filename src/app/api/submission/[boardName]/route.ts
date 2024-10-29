@@ -8,12 +8,12 @@ export async function GET(
   req: Request,
   { params }: { params: Promise<{ boardName: string }> }
 ) {
-  const session = await auth();
+  // const session = await auth();
   const boardName = (await params).boardName;
 
-  if (!session || !session.user) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  }
+  // if (!session || !session.user) {
+  //   return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  // }
   try {
     await dbConnect();
     const submissions = await Submission.find({ spaceUrlKey: boardName });
