@@ -11,6 +11,9 @@ const EmbedCarousel = () => {
 
     if (!boardName) return;
 
+    // Clean up any existing iframes before appending new ones
+    embedContainer.innerHTML = "";
+
     // Create and configure the iframe
     const iframe = document.createElement("iframe");
     iframe.src = `http://localhost:3000/embed/${boardName}`;
@@ -20,20 +23,9 @@ const EmbedCarousel = () => {
 
     // Append iframe to the embed container
     embedContainer.appendChild(iframe);
-
-    // Load the external script
-    const script = document.createElement("script");
-    script.src = "http://localhost:3000/embedScript.js";
-    script.async = true;
-    document.body.appendChild(script);
-
-    // Cleanup function to remove the script when the component unmounts
-    return () => {
-      document.body.removeChild(script);
-    };
   }, []);
 
-  return <div id="yourEmbedContainer" data-board-name="shivas-space"></div>;
+  return <div id="yourEmbedContainer" data-board-name="hyderabad"></div>;
 };
 
 export default EmbedCarousel;

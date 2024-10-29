@@ -3,6 +3,8 @@
 
 import { useEffect, useState } from "react";
 import axios from "axios";
+
+import Autoplay from "embla-carousel-autoplay";
 import {
   Card,
   CardContent,
@@ -42,7 +44,14 @@ export default function EmbedCarousel({
 
   return (
     <div className="w-full flex items-center justify-center">
-      <Carousel className="w-full max-w-xs">
+      <Carousel
+        plugins={[
+          Autoplay({
+            delay: 2000,
+          }),
+        ]}
+        className="w-full max-w-xs"
+      >
         <CarouselPrevious />
         <CarouselContent>
           {submissions.map((item, index) => (
