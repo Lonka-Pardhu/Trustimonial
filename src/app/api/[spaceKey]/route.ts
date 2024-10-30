@@ -22,7 +22,6 @@ export async function GET(
     }
     return NextResponse.json({ space }, { status: 201 });
   } catch (error) {
-    console.log("ERROR>>>", error);
     return NextResponse.json(
       { message: "Failed to fetch space", error },
       { status: 500 }
