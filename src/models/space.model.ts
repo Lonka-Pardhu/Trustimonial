@@ -7,7 +7,7 @@ const spaceSchema = new Schema(
       type: String,
       required: true,
     },
-    
+
     spaceOwner: {
       type: Schema.Types.ObjectId,
       ref: "User",
@@ -18,6 +18,9 @@ const spaceSchema = new Schema(
     message: { type: String, required: true },
     questions: { type: [String], required: true }, // Array of questions
     submissions: [
+      { type: Schema.Types.ObjectId, ref: "Submission", default: [] },
+    ],
+    pinnedSubmissions: [
       { type: Schema.Types.ObjectId, ref: "Submission", default: [] },
     ],
   },

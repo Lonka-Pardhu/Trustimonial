@@ -23,6 +23,7 @@ const submissionSchema = new Schema(
       type: String,
       required: true,
     },
+    pinned: { type: Boolean, default: false },
   },
   { timestamps: true }
 );
