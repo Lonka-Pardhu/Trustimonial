@@ -4,6 +4,7 @@ import Space from "@/models/space.model";
 import { dbConnect } from "@/lib/db";
 import { auth } from "@/auth";
 import User from "@/models/user.model";
+import Submission from "@/models/submission.model";
 
 export async function POST(req: Request) {
   const session = await auth();
@@ -128,8 +129,14 @@ export async function DELETE(req: Request) {
         { status: 404 }
       );
     }
+    const deletedSubmissions = await Submission.deleteMany({
+      spaceId: spaceId,
+    });
+
     return NextResponse.json(
-      { message: "Space deleted successfully" },
+      {
+        message: `Space and associated ${deletedSubmissions.deletedCount} submissions deleted successfully`,
+      },
       { status: 200 }
     );
   } catch (error) {

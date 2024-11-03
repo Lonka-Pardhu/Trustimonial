@@ -20,27 +20,23 @@ import {
   CarouselPrevious,
 } from "@/components/ui/carousel";
 
-export default function EmbedCarousel({
-  params,
-}: {
-  params: { boardName: string };
-}) {
+export default function EmbedPinnedCarousel() {
   const [submissions, setSubmissions] = useState([]);
 
   useEffect(() => {
     const fetchSubmissions = async () => {
       try {
-        const res = await axios.get(`/api/submission/${params.boardName}`);
+        const res = await axios.get(`/api/submission/pinned`);
         setSubmissions(res.data.submissions);
       } catch (error) {
         console.error(error);
       }
     };
     fetchSubmissions();
-  }, [params.boardName]);
+  }, []);
 
   if (submissions.length === 0) {
-    return <p>No testimonials available.</p>;
+    return <p>No pinned testimonials available.</p>;
   }
 
   return (

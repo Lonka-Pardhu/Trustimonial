@@ -98,13 +98,13 @@ const SpaceFormPage = ({ params }: { params: { spaceKey: string } }) => {
             <h3>{space.message}</h3>
             <ul>
               {space.questions.map((question, index) => (
-                <li key={index} className="border rounded-lg p-2 mb-2">
+                <li key={index} className=" rounded-lg p-1">
                   {question}
                 </li>
               ))}
             </ul>
-            <div>
-              <Label htmlFor="name">your Name</Label>
+            <div className="mt-2">
+              <Label htmlFor="name">Your name</Label>
               <Input
                 id="name"
                 {...register("name", { required: true })}
@@ -115,7 +115,7 @@ const SpaceFormPage = ({ params }: { params: { spaceKey: string } }) => {
               )}
             </div>
             <div>
-              <Label htmlFor="email">your email</Label>
+              <Label htmlFor="email">Your email</Label>
               <Input
                 id="email"
                 {...register("email", { required: true })}
@@ -126,7 +126,7 @@ const SpaceFormPage = ({ params }: { params: { spaceKey: string } }) => {
               )}
             </div>
             <div>
-              <Label htmlFor="description">Your Message</Label>
+              <Label htmlFor="description">Your review message</Label>
               <Textarea
                 id="description"
                 {...register("description", { required: true })}
