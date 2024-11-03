@@ -1,15 +1,19 @@
 "use client";
 import React, { useEffect } from "react";
 
-const EmbedCarousel = () => {
+interface EmbedCarouselProps {
+  boardName: string;
+}
+
+const EmbedCarousel: React.FC<EmbedCarouselProps> = ({ boardName }) => {
   useEffect(() => {
     const embedContainer = document.getElementById("yourEmbedContainer");
 
     if (!embedContainer) return;
 
-    const boardName = embedContainer.getAttribute("data-board-name");
+    // const boardName = embedContainer.getAttribute("data-board-name");
 
-    if (!boardName) return;
+    // if (!boardName) return;
 
     // Clean up any existing iframes before appending new ones
     embedContainer.innerHTML = "";
@@ -18,14 +22,14 @@ const EmbedCarousel = () => {
     const iframe = document.createElement("iframe");
     iframe.src = `http://localhost:3000/embed/${boardName}`;
     iframe.width = "100%";
-    iframe.height = "400px";
+    iframe.height = "auto";
     iframe.style.border = "none";
 
     // Append iframe to the embed container
     embedContainer.appendChild(iframe);
   }, []);
 
-  return <div id="yourEmbedContainer" data-board-name="hyderabad"></div>;
+  return <div id="yourEmbedContainer"></div>;
 };
 
 export default EmbedCarousel;

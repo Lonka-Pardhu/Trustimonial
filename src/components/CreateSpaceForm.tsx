@@ -84,32 +84,37 @@ const CreateSpaceForm = () => {
     <>
       <Dialog open={spaceDailogOpen} onOpenChange={setSpaceDailogOpen}>
         <DialogTrigger asChild>
-          <Button variant="outline">Create space +</Button>
+          <Button
+            variant="outline"
+            className="bg-black text-white hover:bg-white "
+          >
+            Create board +
+          </Button>
         </DialogTrigger>
         <DialogContent className="sm:max-w-[425px]">
           <DialogHeader>
-            <DialogTitle>Create your space</DialogTitle>
+            <DialogTitle>Create your board</DialogTitle>
           </DialogHeader>
           <p className="text-red-500">{error}</p>
           <form onSubmit={handleSubmit(onSubmit)} className="space-form">
             <div className="flex flex-col gap-y-1">
               <div>
-                <Label htmlFor="spaceName">Space Name</Label>
+                <Label htmlFor="spaceName">Board Name</Label>
                 <Input
                   id="spaceName"
                   {...register("spaceName", { required: true })}
-                  placeholder="Enter space name"
+                  placeholder="Enter board name"
                 />
                 {errors.spaceName && (
                   <small className="text-red-500">This field is required</small>
                 )}
               </div>
               <div>
-                <Label htmlFor="title">Space Title</Label>
+                <Label htmlFor="title">Board Title</Label>
                 <Input
                   id="title"
                   {...register("title", { required: true })}
-                  placeholder="Enter space title"
+                  placeholder="Enter board title"
                 />
                 {errors.title && (
                   <small className="text-red-500">This field is required</small>

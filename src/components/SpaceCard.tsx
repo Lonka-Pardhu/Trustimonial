@@ -41,31 +41,36 @@ const SpaceCard = () => {
 
   return (
     <div className="m-2 flex flex-row items-center gap-x-1 ">
-      {spaces &&
+      {spaces.length > 0 ? (
         spaces.map((item, index) => {
           return (
-            <Link key={index} href={`/boards/${item.spaceUrlKey}`}>
-              <Card className="w-[200px] text-white bg-[#25282C] h-auto shadow-md broder-[#33363A] border transition-shadow duration-300 cursor-pointer hover:shadow-lg hover:shadow-gray-400">
-                <CardHeader className="flex flex-row items-center justify-between">
+            <Card className="w-[200px] text-white bg-[#25282C] h-auto shadow-md broder-[#33363A] border transition-shadow duration-300  hover:shadow-lg hover:shadow-gray-400">
+              <CardHeader className="flex flex-row items-center justify-between">
+                <Link key={index} href={`/boards/${item.spaceUrlKey}`}>
                   <p>{item.spaceName}</p>
-                  <Button
-                    variant="ghost"
-                    className="hover:bg-red-500"
-                    onClick={() => handleDelete(item._id)}
-                  >
-                    <Trash2 className="w-4 h-4" />
-                  </Button>
-                </CardHeader>
-                <CardContent>
-                  <div className="flex items-center">
-                    <p>Submissions:</p>
-                    <p>{item.submissions.length}</p>
-                  </div>
-                </CardContent>
-              </Card>
-            </Link>
+                </Link>
+                <Button
+                  variant="ghost"
+                  className="hover:bg-red-500"
+                  onClick={() => {
+                    handleDelete(item._id);
+                  }}
+                >
+                  <Trash2 className="w-4 h-4" />
+                </Button>
+              </CardHeader>
+              <CardContent>
+                <div className="flex items-center">
+                  <p>Submissions:</p>
+                  <p>{item.submissions.length}</p>
+                </div>
+              </CardContent>
+            </Card>
           );
-        })}
+        })
+      ) : (
+        <p>Get started by creating a board !</p>
+      )}
     </div>
   );
 };
