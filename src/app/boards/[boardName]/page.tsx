@@ -104,14 +104,15 @@ export default function Page({ params }: { params: { boardName: string } }) {
                   <CardDescription>user email: {item.email}</CardDescription>
                 </div>
                 <Button
+                  variant="ghost"
+                  className={` ml-4 hover:bg-blue-500 ${
+                    item.pinned ? "bg-blue-500" : ""
+                  }`}
                   onClick={() => togglePin(item._id, item.pinned)}
-                  className={`${
-                    item.pinned ? "bg-black" : "bg-white"
-                  } cursor-pointer `}
                 >
                   <Pin
-                    size={20}
-                    strokeWidth={1.75}
+                    size={18}
+                    strokeWidth={1.7}
                     color={item.pinned ? "#ffffff" : "#000000"}
                   />
                 </Button>
