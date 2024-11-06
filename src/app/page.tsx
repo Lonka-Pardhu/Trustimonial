@@ -13,7 +13,7 @@ export default function SignInPage() {
   useEffect(() => {
     if (status === "authenticated") {
       // Redirect to dashboard if user is already authenticated
-      router.replace("/dashboard");
+      router.replace("/dashboard/overview");
     }
   }, []);
 
