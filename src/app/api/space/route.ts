@@ -117,11 +117,10 @@ export async function DELETE(req: Request) {
     }
     await dbConnect();
 
-    const deletedSpace = await Space.deleteOne({
-      _id: spaceId,
-    });
+    // Delete the space
+    const deletedSpace = await Space.deleteOne({ _id: spaceId });
 
-    if (!deletedSpace) {
+    if (!deletedSpace || deletedSpace.deletedCount === 0) {
       return NextResponse.json(
         {
           message: "Space not found or you are not authorized",
@@ -129,9 +128,15 @@ export async function DELETE(req: Request) {
         { status: 404 }
       );
     }
-    const deletedSubmissions = await Submission.deleteMany({
-      spaceId: spaceId,
-    });
+
+    // Remove the space ID from the user's 'spaces' array
+    await User.updateOne(
+      { _id: session.user.id },
+      { $pull: { spaces: spaceId } } // $pull removes the space ID from the array
+    );
+
+    // Delete all submissions associated with the space ID
+    const deletedSubmissions = await Submission.deleteMany({ spaceId });
 
     return NextResponse.json(
       {
