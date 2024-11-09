@@ -46,7 +46,10 @@ const SpaceCard = () => {
           return (
             <Card className="w-[200px] text-white bg-[#25282C] h-auto shadow-md broder-[#33363A] border transition-shadow duration-300  hover:shadow-lg hover:shadow-gray-400">
               <CardHeader className="flex flex-row items-center justify-between">
-                <Link key={index} href={`/boards/${item.spaceUrlKey}`}>
+                <Link
+                  key={index}
+                  href={`/dashboard/boards/${item.spaceUrlKey}`}
+                >
                   <p>{item.spaceName}</p>
                 </Link>
                 <Button
