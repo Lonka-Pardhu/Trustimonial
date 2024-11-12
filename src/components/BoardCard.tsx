@@ -7,42 +7,42 @@ import { Button } from "./ui/button";
 import { toast } from "sonner";
 import Link from "next/link";
 
-const SpaceCard = () => {
-  const [spaces, setSpaces] = useState([]);
+const BoardCard = () => {
+  const [boards, setBoards] = useState([]);
 
   useEffect(() => {
-    const fetchSpaces = async () => {
+    const fetchBoards = async () => {
       try {
         const res = await axios.get(`/api/space`);
         if (res?.status === 200) {
-          setSpaces(res.data.spaces);
+          setBoards(res.data.boards);
         }
       } catch (error) {
         console.log(error);
       }
     };
-    fetchSpaces();
+    fetchBoards();
   }, []);
 
   const handleDelete = async (id) => {
     try {
       const response = await axios.delete("/api/space", {
-        data: { spaceId: id },
+        data: { boardId: id },
       });
       if (response?.status === 200) {
-        toast.success("Space has been deleted");
+        toast.success("Board has been deleted");
       }
-      setSpaces((prevSpaces) => prevSpaces.filter((space) => space._id !== id));
+      setBoards((prevBoards) => prevBoards.filter((board) => board._id !== id));
     } catch (error: any) {
       console.log(error);
-      toast.error(error.response?.data?.message || "Failed to delete space");
+      toast.error(error.response?.data?.message || "Failed to delete board");
     }
   };
 
   return (
     <div className="m-2 flex flex-row items-center gap-x-1 ">
-      {spaces.length > 0 ? (
-        spaces.map((item, index) => {
+      {boards.length > 0 ? (
+        boards.map((item, index) => {
           return (
             <Card className="w-[200px] text-white bg-[#25282C] h-auto shadow-md broder-[#33363A] border transition-shadow duration-300  hover:shadow-lg hover:shadow-gray-400">
               <CardHeader className="flex flex-row items-center justify-between">
@@ -78,4 +78,4 @@ const SpaceCard = () => {
   );
 };
 
-export default SpaceCard;
+export default BoardCard;

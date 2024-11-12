@@ -1,8 +1,8 @@
-import SpaceCard from "@/components/SpaceCard";
+import BoardCard from "@/components/BoardCard";
 import React from "react";
 
 const page = () => {
-  return <SpaceCard />;
+  return <BoardCard />;
 };
 
 export default page;

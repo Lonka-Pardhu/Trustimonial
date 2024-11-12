@@ -81,16 +81,16 @@ export async function GET(req: Request) {
   try {
     await dbConnect();
 
-    const spaces = await Space.find({ spaceOwner: session.user.id });
+    const boards = await Space.find({ spaceOwner: session.user.id });
 
-    if (!spaces || spaces.length === 0) {
+    if (!boards || boards.length === 0) {
       return NextResponse.json(
-        { message: "No spaces found for this user." },
+        { message: "No boards found for this user." },
         { status: 404 }
       );
     }
 
-    return NextResponse.json({ spaces }, { status: 200 });
+    return NextResponse.json({ boards }, { status: 200 });
   } catch (error) {
     return NextResponse.json(
       { message: "Failed to fetch spaces", error },
@@ -107,9 +107,9 @@ export async function DELETE(req: Request) {
   }
 
   try {
-    const { spaceId } = await req.json();
+    const { boardId } = await req.json();
 
-    if (!spaceId) {
+    if (!boardId) {
       return NextResponse.json(
         { message: "Space id is required" },
         { status: 400 }
@@ -118,9 +118,9 @@ export async function DELETE(req: Request) {
     await dbConnect();
 
     // Delete the space
-    const deletedSpace = await Space.deleteOne({ _id: spaceId });
+    const deletedBoard = await Space.deleteOne({ _id: boardId });
 
-    if (!deletedSpace || deletedSpace.deletedCount === 0) {
+    if (!deletedBoard || deletedBoard.deletedCount === 0) {
       return NextResponse.json(
         {
           message: "Space not found or you are not authorized",
@@ -132,22 +132,22 @@ export async function DELETE(req: Request) {
     // Remove the space ID from the user's 'spaces' array
     await User.updateOne(
       { _id: session.user.id },
-      { $pull: { spaces: spaceId } } // $pull removes the space ID from the array
+      { $pull: { spaces: boardId } } // $pull removes the space ID from the array
     );
 
     // Delete all submissions associated with the space ID
-    const deletedSubmissions = await Submission.deleteMany({ spaceId });
+    const deletedSubmissions = await Submission.deleteMany({ boardId });
 
     return NextResponse.json(
       {
-        message: `Space and associated ${deletedSubmissions.deletedCount} submissions deleted successfully`,
+        message: `Board and associated ${deletedSubmissions.deletedCount} submissions deleted successfully`,
       },
       { status: 200 }
     );
   } catch (error) {
     console.log(error);
     return NextResponse.json(
-      { message: "Failed to delete space" },
+      { message: "Failed to delete board" },
       { status: 500 }
     );
   }

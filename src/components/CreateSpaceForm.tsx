@@ -31,9 +31,9 @@ const CreateSpaceForm = () => {
   } = useForm();
 
   const [isCopied, setIsCopied] = useState(false);
-  const [spaceDailogOpen, setSpaceDailogOpen] = useState(false);
+  const [boardDailogOpen, setBoardDailogOpen] = useState(false);
   const [linkDailogOpen, setLinkDailogOpen] = useState(false);
-  const [spaceLink, setSpaceLink] = useState("");
+  const [boardLink, setBoardLink] = useState("");
   const [questions, setQuestions] = useState(["", "", ""]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
@@ -50,16 +50,16 @@ const CreateSpaceForm = () => {
       });
 
       if (res.status === 201) {
-        setSpaceLink(`http://localhost:3000/${res.data.url}`);
+        setBoardLink(`http://localhost:3000/${res.data.url}`);
         reset();
-        setSpaceDailogOpen(false);
+        setBoardDailogOpen(false);
         setLinkDailogOpen(true);
-        toast.success("Space has been created");
+        toast.success("Board has been created");
       }
     } catch (error: any) {
       console.log(error);
       if (error.response) {
-        setError(error.response.data.message || "Failed to create space");
+        setError(error.response.data.message || "Failed to create board");
       } else {
         setError("Network error or server unreachable");
       }
@@ -75,14 +75,14 @@ const CreateSpaceForm = () => {
   };
 
   const handleCopy = () => {
-    navigator.clipboard.writeText(spaceLink);
+    navigator.clipboard.writeText(boardLink);
     setIsCopied(true);
     setTimeout(() => setIsCopied(false), 3000);
   };
 
   return (
     <>
-      <Dialog open={spaceDailogOpen} onOpenChange={setSpaceDailogOpen}>
+      <Dialog open={boardDailogOpen} onOpenChange={setBoardDailogOpen}>
         <DialogTrigger asChild>
           <Button
             variant="outline"
@@ -167,10 +167,10 @@ const CreateSpaceForm = () => {
       <Dialog open={linkDailogOpen} onOpenChange={setLinkDailogOpen}>
         <DialogContent className="sm:max-w-[425px">
           <DialogHeader>
-            <DialogTitle>Space created successfully!</DialogTitle>
+            <DialogTitle>Board created successfully!</DialogTitle>
           </DialogHeader>
           <div className="flex flex-row items-center w-full gap-x-2">
-            <p className="p-2 border rounded-md w-full">{spaceLink}</p>
+            <p className="p-2 border rounded-md w-full">{boardLink}</p>
             <Button
               variant="secondary"
               className="flex items-center gap-x-1"
