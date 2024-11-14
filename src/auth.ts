@@ -11,4 +11,5 @@ export const {
 } = NextAuth({
   adapter: MongoDBAdapter(client),
   providers: [Google],
+  pages: { signIn: "/signIn" },
 });
