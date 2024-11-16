@@ -1,6 +1,6 @@
 "use client";
-import React from "react";
-import { signIn } from "next-auth/react";
+import React, { useEffect } from "react";
+import { signIn, useSession } from "next-auth/react";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -12,8 +12,20 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { LoaderCircle } from "lucide-react";
 
 const SignInForm = () => {
+  const { status } = useSession();
+  const router = useRouter();
+
+  useEffect(() => {
+    if (status === "authenticated") {
+      // Redirect to dashboard if user is already authenticated
+      router.replace("/dashboard/overview");
+    }
+  }, []);
+
   return (
     <Card className="mx-auto max-w-sm">
       <CardHeader>
@@ -43,14 +55,24 @@ const SignInForm = () => {
             <Input id="password" type="password" required />
           </div>
           <Button type="submit" className="w-full">
-            Login
+            {status === "loading" ? (
+              <LoaderCircle className="animate-spin" />
+            ) : (
+              "Login"
+            )}
           </Button>
           <Button
-            onClick={() => signIn("google", { callbackUrl: "/dashboard" })}
+            onClick={() =>
+              signIn("google", { callbackUrl: "/dashboard/overview" })
+            }
             variant="outline"
             className="w-full"
           >
-            Login with Google
+            {status === "loading" ? (
+              <LoaderCircle className="animate-spin" />
+            ) : (
+              "Login with Google"
+            )}
           </Button>
         </div>
         <div className="mt-4 text-center text-sm">

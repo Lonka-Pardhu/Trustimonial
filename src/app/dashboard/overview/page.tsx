@@ -5,26 +5,32 @@ import Header from "@/components/HeaderNav";
 import SpaceCard from "@/components/BoardCard";
 import { SessionProvider } from "next-auth/react";
 import React from "react";
+import { auth } from "@/auth";
+import { redirect } from "next/navigation";
 
-const Overview = () => {
+const Overview = async () => {
+  const session = await auth();
+
+  if (!session?.user) {
+    return redirect("/");
+  }
+
   return (
-    <SessionProvider>
-      <div className="w-full">
-        <div className="p-2">
-          <div className="mt-5">
-            <CreateSpaceForm />
-          </div>
-          <div>
-            <h3 className="pt-4 text-3xl font-semibold tracking-tight first:mt-0">
-              Embed pinned reviews carousel preview:
-            </h3>
-            <br />
-            <EmbedPinnedCarousel />
-            <CopyIframe />
-          </div>
+    <div className="w-full">
+      <div className="p-2">
+        <div className="mt-5">
+          <CreateSpaceForm />
+        </div>
+        <div>
+          <h3 className="pt-4 text-3xl font-semibold tracking-tight first:mt-0">
+            Embed pinned reviews carousel preview:
+          </h3>
+          <br />
+          <EmbedPinnedCarousel />
+          <CopyIframe />
         </div>
       </div>
-    </SessionProvider>
+    </div>
   );
 };
 
