@@ -18,6 +18,7 @@ import { Icons } from "@/components/icons";
 //   category: string;
 //   updated_at: string;
 // };
+
 interface NavItem {
   title: string;
   url: string;
