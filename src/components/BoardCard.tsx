@@ -1,6 +1,6 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import { Card, CardContent, CardHeader } from "./ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
 import axios from "axios";
 import { Trash2 } from "lucide-react";
 import { Button } from "./ui/button";
@@ -44,28 +44,30 @@ const BoardCard = () => {
       {boards.length > 0 ? (
         boards.map((item, index) => {
           return (
-            <Card className="w-[200px] text-white bg-[#25282C] h-auto shadow-md broder-[#33363A] border transition-shadow duration-300  hover:shadow-lg hover:shadow-gray-400">
-              <CardHeader className="flex flex-row items-center justify-between">
-                <Link
-                  key={index}
-                  href={`/dashboard/boards/${item.spaceUrlKey}`}
-                >
-                  <p>{item.spaceName}</p>
-                </Link>
-                <Button
-                  variant="ghost"
-                  className="hover:bg-red-500"
-                  onClick={() => {
-                    handleDelete(item._id);
-                  }}
-                >
-                  <Trash2 className="w-4 h-4" />
-                </Button>
+            <Card>
+              <CardHeader>
+                <CardTitle>{item.spaceUrlKey}</CardTitle>
               </CardHeader>
               <CardContent>
-                <div className="flex items-center">
-                  <p>Submissions:</p>
-                  <p>{item.submissions.length}</p>
+                <p className="text-sm text-muted-foreground">
+                  <p>{item.spaceName}</p>{" "}
+                </p>
+                <div className="mt-4 flex items-center justify-between">
+                  <div className="text-sm text-muted-foreground">
+                    <p>{item.submissions.length} Testimonials</p>
+                  </div>
+                  <div className="text-sm text-muted-foreground">
+                    Last active: 5m ago
+                  </div>
+                </div>
+                <div className="mt-4 flex gap-2">
+                  <Link
+                    key={index}
+                    href={`/dashboard/boards/${item.spaceUrlKey}`}
+                  >
+                    <Button variant="outline">View Board</Button>
+                  </Link>
+                  <Button>Generate Embed</Button>
                 </div>
               </CardContent>
             </Card>

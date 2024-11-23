@@ -11,12 +11,13 @@ export default function SignInPage() {
   const { status } = useSession();
   const router = useRouter();
 
-  useEffect(() => {
-    if (status === "authenticated") {
-      // Redirect to dashboard if user is already authenticated
-      router.replace("/dashboard/overview");
-    }
-  }, []);
+  // useEffect(() => {
+  //   if (status === "authenticated") {
+  //    // Redirect to dashboard if user is already authenticated
+  //     router.replace("/dashboard/overview");
+  //   }
+  // }, []);
+  // console.log("STATUS>", status);
 
   // if (status === "loading") {
   //   return (
