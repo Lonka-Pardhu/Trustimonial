@@ -84,12 +84,10 @@ const CreateSpaceForm = () => {
     <>
       <Dialog open={boardDailogOpen} onOpenChange={setBoardDailogOpen}>
         <DialogTrigger asChild>
-          <Button
-            variant="outline"
-            className="bg-black text-white hover:bg-white "
-          >
-            Create board +
-          </Button>
+          <div className="border-2 border-dashed border-gray-300 p-6 flex flex-col items-center justify-center w-64 h-48 rounded-lg cursor-pointer hover:border-gray-400">
+            <div className="text-gray-500 text-3xl mb-2">+</div>
+            <p className="text-gray-600 font-medium">Create New Board</p>
+          </div>
         </DialogTrigger>
         <DialogContent className="sm:max-w-[425px]">
           <DialogHeader>

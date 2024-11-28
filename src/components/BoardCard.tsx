@@ -6,6 +6,7 @@ import { Trash2 } from "lucide-react";
 import { Button } from "./ui/button";
 import { toast } from "sonner";
 import Link from "next/link";
+import CreateSpaceForm from "./CreateBoard";
 
 const BoardCard = () => {
   const [boards, setBoards] = useState([]);
@@ -40,7 +41,7 @@ const BoardCard = () => {
   };
 
   return (
-    <div className="m-2 flex flex-row items-center gap-x-1 ">
+    <div className="m-2 flex flex-row items-center gap-x-2 flex-wrap gap-y-2 ">
       {boards.length > 0 ? (
         boards.map((item, index) => {
           return (
@@ -50,7 +51,7 @@ const BoardCard = () => {
               </CardHeader>
               <CardContent>
                 <p className="text-sm text-muted-foreground">
-                  <p>{item.spaceName}</p>{" "}
+                  <p>{item.spaceName}</p>
                 </p>
                 <div className="mt-4 flex items-center justify-between">
                   <div className="text-sm text-muted-foreground">
@@ -67,7 +68,15 @@ const BoardCard = () => {
                   >
                     <Button variant="outline">View Board</Button>
                   </Link>
-                  <Button>Generate Embed</Button>
+                  <Button
+                    variant="ghost"
+                    className="hover:bg-red-500"
+                    onClick={() => {
+                      handleDelete(item._id);
+                    }}
+                  >
+                    <Trash2 className="w-4 h-4" />
+                  </Button>{" "}
                 </div>
               </CardContent>
             </Card>
@@ -76,6 +85,7 @@ const BoardCard = () => {
       ) : (
         <p>Get started by creating a board !</p>
       )}
+      <CreateSpaceForm />
     </div>
   );
 };

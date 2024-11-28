@@ -1,6 +1,6 @@
 import EmbedPinnedCarousel from "@/app/embed/pinned/page";
 import CopyIframe from "@/components/CopyIframe";
-import CreateSpaceForm from "@/components/CreateSpaceForm";
+import CreateSpaceForm from "@/components/CreateBoard";
 import Header from "@/components/HeaderNav";
 import SpaceCard from "@/components/BoardCard";
 import { SessionProvider } from "next-auth/react";
