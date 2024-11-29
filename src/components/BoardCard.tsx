@@ -8,8 +8,15 @@ import { toast } from "sonner";
 import Link from "next/link";
 import CreateSpaceForm from "./CreateBoard";
 
+interface Board {
+  _id: string;
+  spaceUrlKey: string;
+  spaceName: string;
+  submissions: { length: number }; // Or define the structure of submissions more specifically
+}
+
 const BoardCard = () => {
-  const [boards, setBoards] = useState([]);
+  const [boards, setBoards] = useState<Board[]>([]);
 
   useEffect(() => {
     const fetchBoards = async () => {
@@ -25,7 +32,7 @@ const BoardCard = () => {
     fetchBoards();
   }, []);
 
-  const handleDelete = async (id) => {
+  const handleDelete = async (id: string) => {
     try {
       const response = await axios.delete("/api/space", {
         data: { boardId: id },
@@ -76,7 +83,7 @@ const BoardCard = () => {
                     }}
                   >
                     <Trash2 className="w-4 h-4" />
-                  </Button>{" "}
+                  </Button>
                 </div>
               </CardContent>
             </Card>
