@@ -20,12 +20,18 @@ import {
   CarouselPrevious,
 } from "@/components/ui/carousel";
 
+interface Submission {
+  name: string;
+  email: string;
+  description: string;
+}
+
 export default function EmbedCarousel({
   params,
 }: {
   params: { boardName: string };
 }) {
-  const [submissions, setSubmissions] = useState([]);
+  const [submissions, setSubmissions] = useState<Submission[]>([]);
 
   useEffect(() => {
     const fetchSubmissions = async () => {
