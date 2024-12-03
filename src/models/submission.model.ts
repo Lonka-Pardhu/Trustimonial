@@ -24,6 +24,12 @@ const submissionSchema = new Schema(
       required: true,
     },
     pinned: { type: Boolean, default: false },
+    rating: {
+      type: Number,
+      min: 1,
+      max: 5,
+      required: true, // Ensure that rating is always submitted
+    },
   },
   { timestamps: true }
 );
