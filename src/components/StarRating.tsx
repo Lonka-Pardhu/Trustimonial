@@ -1,14 +1,12 @@
 import { Star } from "lucide-react";
-import React, { useState } from "react";
-
+import { useState } from "react";
 interface StarRatingProps {
   value?: number;
   onChange?: (rating: number) => void;
   readOnly?: boolean;
 }
-
 const StarRating: React.FC<StarRatingProps> = ({
-  value,
+  value = 0,
   onChange,
   readOnly,
 }) => {
@@ -16,7 +14,7 @@ const StarRating: React.FC<StarRatingProps> = ({
 
   const handleClick = (starValue: number) => {
     if (onChange && !readOnly) {
-      onChange(starValue); // Allow change if not readOnly
+      onChange(starValue);
     }
   };
 
@@ -25,9 +23,9 @@ const StarRating: React.FC<StarRatingProps> = ({
       {[1, 2, 3, 4, 5].map((starValue) => (
         <Star
           key={starValue}
-          onClick={() => handleClick(starValue)} // Only allows clicks when not readOnly
-          onMouseEnter={() => !readOnly && setHoveredRating(starValue)} // Prevent hover effect if readOnly
-          onMouseLeave={() => !readOnly && setHoveredRating(0)} // Prevent hover effect if readOnly
+          onClick={() => handleClick(starValue)}
+          onMouseEnter={() => !readOnly && setHoveredRating(starValue)}
+          onMouseLeave={() => !readOnly && setHoveredRating(0)}
           strokeWidth={0}
           className={`w-5 h-5 cursor-pointer transform transition-all duration-200 ease-in-out ${
             starValue <= (hoveredRating || value)
@@ -39,5 +37,4 @@ const StarRating: React.FC<StarRatingProps> = ({
     </div>
   );
 };
-
 export default StarRating;
