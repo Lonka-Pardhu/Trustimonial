@@ -39,7 +39,7 @@ export async function POST(
   try {
     await dbConnect(); // Ensure the database is connected
 
-    const { spaceId, name, email, description } = await req.json();
+    const { spaceId, name, email, description, rating } = await req.json();
 
     // Create the new submission
     const newSubmission = await Submission.create({
@@ -48,6 +48,7 @@ export async function POST(
       name,
       email,
       description,
+      rating,
     });
 
     // Find the space by its ID and update it by pushing the submission ID into the submissions array

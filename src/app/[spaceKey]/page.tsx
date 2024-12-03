@@ -1,4 +1,5 @@
 "use client";
+import StarRating from "@/components/StarRating";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -10,14 +11,15 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
+
 import { Label } from "@radix-ui/react-label";
 import axios from "axios";
 import { LoaderCircle } from "lucide-react";
 import { useEffect, useState } from "react";
-import { useForm } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
 import { toast } from "sonner";
 
-interface Space {
+interface Board {
   _id: string;
   spaceName: string;
   title: string;
@@ -30,10 +32,11 @@ const SpaceFormPage = ({ params }: { params: { spaceKey: string } }) => {
   const {
     register,
     handleSubmit,
+    control,
     formState: { errors },
     reset,
   } = useForm();
-  const [space, setSpace] = useState<Space | null>(null);
+  const [space, setSpace] = useState<Board | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
@@ -51,12 +54,13 @@ const SpaceFormPage = ({ params }: { params: { spaceKey: string } }) => {
   }, []);
 
   const onSubmit = async (data: any) => {
+    console.log("rating from form data:", data.rating);
     setLoading(true);
     setError("");
     try {
       const formData = {
         ...data,
-        spaceId: space?._id, // Include the spaceId in the form data
+        spaceId: space?._id,
       };
       const res = await axios.post(
         `/api/submission/${params.spaceKey}`,
@@ -134,6 +138,23 @@ const SpaceFormPage = ({ params }: { params: { spaceKey: string } }) => {
               />
               {errors.description && (
                 <small className="text-red-500">This field is required</small>
+              )}
+            </div>
+            <div>
+              <Label htmlFor="rating">Your Rating</Label>
+              <Controller
+                name="rating"
+                control={control}
+                rules={{ required: "Rating is required" }}
+                render={({ field }) => (
+                  <StarRating
+                    value={field.value} // Passing the rating from react-hook-form
+                    onChange={(value) => field.onChange(value)} // Updating the form state
+                  />
+                )}
+              />
+              {errors.rating && (
+                <small className="text-red-500">rating is required</small>
               )}
             </div>
           </CardContent>

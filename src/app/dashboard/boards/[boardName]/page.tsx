@@ -13,6 +13,7 @@ import { Pin } from "lucide-react";
 import { toast } from "sonner";
 import EmbedCarousel from "@/components/EmbedCarousel";
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
+import StarRating from "@/components/StarRating";
 
 interface Submission {
   _id: string;
@@ -20,6 +21,7 @@ interface Submission {
   email: string;
   description: string;
   pinned: boolean;
+  rating: number;
 }
 
 export default function Page({ params }: { params: { boardName: string } }) {
@@ -117,7 +119,10 @@ export default function Page({ params }: { params: { boardName: string } }) {
                   />
                 </Button>
               </CardHeader>
-              <CardContent>user message: {item.description}</CardContent>
+              <CardContent>Message: {item.description}</CardContent>
+              <CardContent>
+                Rating: <StarRating value={item.rating} readOnly={true} />
+              </CardContent>
             </Card>
           );
         })}
