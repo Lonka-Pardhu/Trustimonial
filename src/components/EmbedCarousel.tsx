@@ -20,7 +20,7 @@ const EmbedCarousel: React.FC<EmbedCarouselProps> = ({ boardName }) => {
 
     // Create and configure the iframe
     const iframe = document.createElement("iframe");
-    iframe.src = `http://localhost:3000/embed/${boardName}`;
+    iframe.src = `${process.env.NEXT_PUBLIC_NEXTAUTH_URL}/embed/${boardName}`;
     iframe.width = "100%";
     iframe.height = "auto";
     iframe.style.border = "none";

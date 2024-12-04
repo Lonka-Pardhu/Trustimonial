@@ -22,7 +22,7 @@ import {
 } from "@/components/ui/dialog";
 import { toast } from "sonner";
 
-const CreateSpaceForm = () => {
+const CreateBoardForm = () => {
   const {
     register,
     handleSubmit,
@@ -50,7 +50,7 @@ const CreateSpaceForm = () => {
       });
 
       if (res.status === 201) {
-        setBoardLink(`http://localhost:3000/${res.data.url}`);
+        setBoardLink(`${process.env.NEXT_PUBLIC_NEXTAUTH_URL}/${res.data.url}`);
         reset();
         setBoardDailogOpen(false);
         setLinkDailogOpen(true);
@@ -84,10 +84,10 @@ const CreateSpaceForm = () => {
     <>
       <Dialog open={boardDailogOpen} onOpenChange={setBoardDailogOpen}>
         <DialogTrigger asChild>
-          <div className="border-2 border-dashed border-gray-300 p-6 flex flex-col items-center justify-center w-64 h-48 rounded-lg cursor-pointer hover:border-gray-400">
-            <div className="text-gray-500 text-3xl mb-2">+</div>
-            <p className="text-gray-600 font-medium">Create New Board</p>
-          </div>
+          <Button>
+            <span className="mr-2">+</span>
+            Create New Board
+          </Button>
         </DialogTrigger>
         <DialogContent className="sm:max-w-[425px]">
           <DialogHeader>
@@ -184,4 +184,4 @@ const CreateSpaceForm = () => {
   );
 };
 
-export default CreateSpaceForm;
+export default CreateBoardForm;
