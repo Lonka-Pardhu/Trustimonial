@@ -11,7 +11,7 @@ const CopyIframe = () => {
 
   useEffect(() => {
     setIframeCode(
-      `<iframe id="embedIframe" src="http://localhost:3000/embed/pinned" frameBorder="0" scrolling="no" width="100%" style="height: 400px;"></iframe>`
+      `<iframe id="embedIframe" src="${process.env.NEXT_PUBLIC_NEXTAUTH_URL}/embed/pinned" frameBorder="0" scrolling="no" width="100%" style="height: 400px;"></iframe>`
     );
   });
 

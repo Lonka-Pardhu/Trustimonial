@@ -31,7 +31,7 @@ export default function Page({ params }: { params: { boardName: string } }) {
 
   useEffect(() => {
     setIframeCode(
-      `<iframe id="embedIframe" src="http://localhost:3000/embed/${params.boardName}" frameBorder="0" scrolling="no" width="100%" style="height: 400px;"></iframe>`
+      `<iframe id="embedIframe" src="${process.env.NEXT_PUBLIC_NEXTAUTH_URL}/embed/${params.boardName}" frameBorder="0" scrolling="no" width="100%" style="height: 400px;"></iframe>`
     );
   }, [params.boardName]);
 

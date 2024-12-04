@@ -31,7 +31,7 @@ const StarRating: React.FC<StarRatingProps> = ({
             starValue <= (hoveredRating || value)
               ? "fill-yellow-400 scale-110"
               : "fill-gray-500"
-          } ${readOnly ? "cursor-default" : ""}`} // Disable cursor if readOnly
+          } ${readOnly ? "cursor-default" : ""}`}
         />
       ))}
     </div>
