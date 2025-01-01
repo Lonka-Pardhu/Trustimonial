@@ -14,6 +14,7 @@ interface BoardCardProps {
   title: string;
   testimonialCount: number;
   lastActive?: string;
+  onDelete: () => void;
 }
 
 export function BoardCard({
@@ -21,6 +22,7 @@ export function BoardCard({
   title,
   testimonialCount,
   lastActive,
+  onDelete,
 }: BoardCardProps) {
   return (
     <Card>
@@ -30,9 +32,7 @@ export function BoardCard({
           <Button
             variant="ghost"
             className="hover:bg-red-500"
-            // onClick={() => {
-            //   handleDelete(item._id);
-            // }}
+            onClick={onDelete}
           >
             <Trash2 className="w-4 h-4" />
           </Button>

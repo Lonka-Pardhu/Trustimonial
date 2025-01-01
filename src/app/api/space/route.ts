@@ -111,13 +111,13 @@ export async function DELETE(req: Request) {
 
     if (!boardId) {
       return NextResponse.json(
-        { message: "Space id is required" },
+        { message: "Board id is required" },
         { status: 400 }
       );
     }
     await dbConnect();
 
-    // Delete the space
+    // Delete the board
     const deletedBoard = await Space.deleteOne({ _id: boardId });
 
     if (!deletedBoard || deletedBoard.deletedCount === 0) {
@@ -129,13 +129,13 @@ export async function DELETE(req: Request) {
       );
     }
 
-    // Remove the space ID from the user's 'spaces' array
+    // Remove the space ID from the user's 'boards' array
     await User.updateOne(
       { _id: session.user.id },
-      { $pull: { spaces: boardId } } // $pull removes the space ID from the array
+      { $pull: { spaces: boardId } } // $pull removes the board ID from the array
     );
 
-    // Delete all submissions associated with the space ID
+    // Delete all submissions associated with the board ID
     const deletedSubmissions = await Submission.deleteMany({ boardId });
 
     return NextResponse.json(

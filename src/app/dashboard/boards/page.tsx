@@ -2,6 +2,7 @@
 import { BoardCard } from "@/components/board-card";
 import CreateBoardForm from "@/components/CreateBoard";
 import { Button } from "@/components/ui/button";
+import { Skeleton } from "@/components/ui/skeleton";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import axios from "axios";
 import { useEffect, useState } from "react";
@@ -16,9 +17,11 @@ interface Board {
 
 export default function BoardsPage() {
   const [boards, setBoards] = useState<Board[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     const fetchBoards = async () => {
+      setIsLoading(true);
       try {
         const res = await axios.get(`/api/space`);
         if (res?.status === 200) {
@@ -26,6 +29,8 @@ export default function BoardsPage() {
         }
       } catch (error) {
         console.log(error);
+      } finally {
+        setIsLoading(false);
       }
     };
     fetchBoards();
@@ -60,23 +65,34 @@ export default function BoardsPage() {
           <TabsTrigger value="popular">Most Popular</TabsTrigger>
         </TabsList>
         <TabsContent value="all" className="mt-6">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {boards.length > 0 ? (
-              boards.map((item, index) => {
+          {isLoading && (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {[...Array(6)].map((_, index) => (
+                <Skeleton key={index} className="h-36" />
+              ))}
+            </div>
+          )}
+          {!isLoading && boards.length > 0 ? (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {boards.map((item, index) => {
                 return (
                   <BoardCard
                     key={index}
                     boardUrlKey={item.spaceUrlKey}
                     title={item.spaceName}
                     testimonialCount={item.submissions.length}
-                    // lastActive="2h ago"
+                    onDelete={() => handleDelete(item._id)}
                   />
                 );
-              })
-            ) : (
-              <p>Get started by creating a board !</p>
-            )}
-          </div>
+              })}
+            </div>
+          ) : (
+            <div className="text-center w-full mt-[20%] flex-col flex gap-y-3 items-center justify-center">
+              <Skeleton className="h-12 w-12 rounded-full" />
+              <p>You don't have any boards yet. Create one to get started.</p>
+              <CreateBoardForm />
+            </div>
+          )}
         </TabsContent>
       </Tabs>
     </main>
