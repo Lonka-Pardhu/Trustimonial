@@ -1,10 +1,6 @@
-import EmbedPinnedCarousel from "@/app/embed/pinned/page";
-import CopyIframe from "@/components/CopyIframe";
-import CreateSpaceForm from "@/components/CreateBoard";
-import Header from "@/components/HeaderNav";
-// import BoardCard from "@/components/BoardCard";
-import { SessionProvider } from "next-auth/react";
-import React from "react";
+"use client";
+import { SessionProvider, useSession } from "next-auth/react";
+import React, { useEffect, useState } from "react";
 import { auth } from "@/auth";
 import { redirect } from "next/navigation";
 import {
@@ -17,13 +13,44 @@ import {
 } from "@/components/ui/card";
 import { Grid, MessageSquare, Star } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import axios from "axios";
+import StarRating from "@/components/StarRating";
 
-const Overview = async () => {
-  const session = await auth();
+interface Testimonial {
+  _id: string;
+  name: string;
+  email: string;
+  description: string;
+  rating: number;
+  createdAt: string;
+  spaceId: string;
+  spaceUrlKey: string;
+}
 
-  if (!session?.user) {
+const Overview = () => {
+  const session = useSession();
+  const [recentTestimonials, setRecentTestimonials] = useState<Testimonial[]>(
+    []
+  );
+
+  if (!session) {
     return redirect("/");
   }
+
+  useEffect(() => {
+    const fetchRecentTestimonials = async () => {
+      try {
+        const response = await axios.get("/api/submission");
+        if (response.status === 200) {
+          setRecentTestimonials(response.data.testimonials);
+        }
+      } catch (error) {
+        console.error("Error fetching testimonials:", error);
+      }
+    };
+
+    fetchRecentTestimonials();
+  }, []);
 
   const data = [
     { name: "Jan", testimonials: 4 },
@@ -99,84 +126,40 @@ const Overview = async () => {
       <div className="mb-8">
         <h3 className="text-xl font-semibold mb-4">Recent Testimonials</h3>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          {/* Testimonial Card 1 */}
-          <Card>
-            <CardHeader>
-              <div className="flex items-center justify-between">
-                <div className="flex items-center">
-                  <Avatar className="mr-2">
-                    <AvatarImage src="/placeholder-user-1.jpg" alt="Sarah L." />
-                    <AvatarFallback>SL</AvatarFallback>
-                  </Avatar>
-                  <div>
-                    <CardTitle className="text-sm font-medium">
-                      Sarah L.
-                    </CardTitle>
-                    <CardDescription className="text-xs">
-                      2 hours ago
-                    </CardDescription>
+          {recentTestimonials.map((testimonial) => (
+            <Card>
+              <CardHeader>
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center">
+                    <Avatar className="mr-2">
+                      <AvatarImage
+                        src="/placeholder-user-1.jpg"
+                        alt={testimonial.name}
+                      />
+                      <AvatarFallback>{testimonial.name[0]}</AvatarFallback>
+                    </Avatar>
+                    <div>
+                      <CardTitle className="text-sm font-medium">
+                        {testimonial.name}
+                      </CardTitle>
+                      <CardDescription className="text-xs">
+                        {new Date(testimonial.createdAt).toLocaleDateString()}
+                      </CardDescription>
+                    </div>
+                  </div>
+                  <div className="flex items-center">
+                    <StarRating value={testimonial.rating} />
                   </div>
                 </div>
-                <div className="flex items-center">
-                  {[1, 2, 3, 4, 5].map((star) => (
-                    <Star
-                      key={star}
-                      className="h-4 w-4 fill-yellow-400 text-yellow-400"
-                    />
-                  ))}
-                </div>
-              </div>
-            </CardHeader>
-            <CardContent>
-              <p className="text-sm">
-                "The product exceeded my expectations. It's intuitive, powerful,
-                and has greatly improved our workflow."
-              </p>
-            </CardContent>
-            <CardFooter className="text-xs text-muted-foreground">
-              Board: Product Feedback
-            </CardFooter>
-          </Card>
-
-          {/* Testimonial Card 2 */}
-          <Card>
-            <CardHeader>
-              <div className="flex items-center justify-between">
-                <div className="flex items-center">
-                  <Avatar className="mr-2">
-                    <AvatarImage src="/placeholder-user-2.jpg" alt="Mike T." />
-                    <AvatarFallback>MT</AvatarFallback>
-                  </Avatar>
-                  <div>
-                    <CardTitle className="text-sm font-medium">
-                      Mike T.
-                    </CardTitle>
-                    <CardDescription className="text-xs">
-                      Yesterday
-                    </CardDescription>
-                  </div>
-                </div>
-                <div className="flex items-center">
-                  {[1, 2, 3, 4].map((star) => (
-                    <Star
-                      key={star}
-                      className="h-4 w-4 fill-yellow-400 text-yellow-400"
-                    />
-                  ))}
-                  <Star className="h-4 w-4 text-yellow-400" />
-                </div>
-              </div>
-            </CardHeader>
-            <CardContent>
-              <p className="text-sm">
-                "Great customer service! The team was responsive and helped
-                resolve my issue quickly."
-              </p>
-            </CardContent>
-            <CardFooter className="text-xs text-muted-foreground">
-              Board: Customer Service
-            </CardFooter>
-          </Card>
+              </CardHeader>
+              <CardContent>
+                <p className="text-sm">{testimonial.description}</p>
+              </CardContent>
+              <CardFooter className="text-xs text-muted-foreground">
+                Board: {testimonial.spaceUrlKey}
+              </CardFooter>
+            </Card>
+          ))}
         </div>
       </div>
 
