@@ -88,7 +88,7 @@ export default function BoardsPage() {
             </div>
           ) : (
             <div className="text-center w-full mt-[20%] flex-col flex gap-y-3 items-center justify-center">
-              <Skeleton className="h-12 w-12 rounded-full" />
+              {" "}
               <p>You don't have any boards yet. Create one to get started.</p>
               <CreateBoardForm />
             </div>
