@@ -2,11 +2,13 @@
 import { BoardCard } from "@/components/board-card";
 import CreateBoardForm from "@/components/CreateBoard";
 import { Button } from "@/components/ui/button";
+import { CardStack } from "@/components/ui/card-stack";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
+import { cn } from "@/lib/utils";
 
 interface Board {
   _id: string;
