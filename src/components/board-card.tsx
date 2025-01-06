@@ -7,12 +7,14 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Trash2 } from "lucide-react";
+import Image from "next/image";
 import Link from "next/link";
 
 interface BoardCardProps {
   boardUrlKey: string;
   title: string;
   testimonialCount: number;
+  logoImage: string;
   lastActive?: string;
   onDelete: () => void;
 }
@@ -22,11 +24,20 @@ export function BoardCard({
   title,
   testimonialCount,
   lastActive,
+  logoImage,
   onDelete,
 }: BoardCardProps) {
   return (
     <Card>
       <CardHeader className="py-4">
+        <Image
+          src={logoImage}
+          alt="board image"
+          width={300}
+          height={400}
+          className="w-full h-18 rounded-md"
+        />
+
         <div className="flex justify-between items-center">
           <CardTitle>{title}</CardTitle>
           <Button

@@ -15,6 +15,7 @@ import EmbedCarousel from "@/components/EmbedCarousel";
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import StarRating from "@/components/StarRating";
 import { CardStack } from "@/components/ui/card-stack";
+import Image from "next/image";
 
 interface Submission {
   _id: string;
@@ -84,6 +85,7 @@ export default function Page({ params }: { params: { boardName: string } }) {
       </div>
     );
   }
+
   if (submissions.length === 0) {
     return (
       <div className="flex items-center justify-center w-full p-2">
@@ -93,11 +95,11 @@ export default function Page({ params }: { params: { boardName: string } }) {
   }
 
   return (
-    <div>
-      <h2 className=" pb-2 text-3xl font-semibold tracking-tight first:mt-0">
-        Board: {params.boardName}
+    <main className="flex-1 p-6">
+      <h2 className="text-2xl font-semibold mb-6">
+        DBoard: {params.boardName}
       </h2>
-      <div className="m-2 flex flex-row items-start gap-x-1">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {submissions.map((item, index) => {
           return (
             <Card key={index}>
@@ -128,34 +130,70 @@ export default function Page({ params }: { params: { boardName: string } }) {
           );
         })}
       </div>
-      <br />
-      {submissions.length > 0 && <CardStack items={submissions} />}
-      <h3 className="pb-2 text-3xl font-semibold tracking-tight first:mt-0">
-        Embed {params.boardName} carousel :
-      </h3>
-      <EmbedCarousel boardName={params.boardName} />
-      {/* <div className="h-[40rem] flex items-center justify-center w-full">
-        <CardStack items={submissions} />
-      </div> */}
-      <div className="flex items-center justify-center">
-        <Dialog>
-          <DialogTrigger asChild>
-            <Button className="mt-4">Get Embed iframe</Button>
-          </DialogTrigger>
-          <DialogContent className="max-w-md">
-            <h3 className="text-lg font-semibold mb-2">Embed this iframe</h3>
-            <p className="text-sm mb-4">
-              Copy the code below to embed this carousel on your site.
-            </p>
-            <div className="p-2 bg-gray-100 rounded-md text-sm break-all">
-              <code>{iframeCode}</code>
-            </div>
-            <Button variant="secondary" className="mt-2" onClick={handleCopy}>
-              {isCopied ? "Copied" : "Copy to clip board"}
-            </Button>
-          </DialogContent>
-        </Dialog>
-      </div>
-    </div>
+    </main>
+    // <div>
+    //   <h2 className=" pb-2 text-3xl font-semibold tracking-tight first:mt-0">
+    //     Board: {params.boardName}
+    //   </h2>
+    //   <div className="m-2 flex flex-row items-start gap-x-1">
+    //     {submissions.map((item, index) => {
+    //       return (
+    //         <Card key={index}>
+    //           <CardHeader className="w-full flex flex-row items-center justify-between">
+    //             <div>
+    //               <CardTitle>user name: {item.name}</CardTitle>
+    //               <CardDescription>user email: {item.email}</CardDescription>
+    //             </div>
+    //             <Button
+    //               variant="ghost"
+    //               className={` ml-4 hover:bg-blue-500 ${
+    //                 item.pinned ? "bg-blue-500" : ""
+    //               }`}
+    //               onClick={() => togglePin(item._id, item.pinned)}
+    //             >
+    //               <Pin
+    //                 size={18}
+    //                 strokeWidth={1.7}
+    //                 color={item.pinned ? "#ffffff" : "#000000"}
+    //               />
+    //             </Button>
+    //           </CardHeader>
+    //           <CardContent>Message: {item.description}</CardContent>
+    //           <CardContent>
+    //             Rating: <StarRating value={item.rating} readOnly={true} />
+    //           </CardContent>
+    //         </Card>
+    //       );
+    //     })}
+    //   </div>
+    //   <br />
+    //   {submissions.length > 0 && <CardStack items={submissions} />}
+    //   <h3 className="pb-2 text-3xl font-semibold tracking-tight first:mt-0">
+    //     Embed {params.boardName} carousel :
+    //   </h3>
+    //   <EmbedCarousel boardName={params.boardName} />
+    //   {/* <div className="h-[40rem] flex items-center justify-center w-full">
+    //     <CardStack items={submissions} />
+    //   </div> */}
+    //   <div className="flex items-center justify-center">
+    //     <Dialog>
+    //       <DialogTrigger asChild>
+    //         <Button className="mt-4">Get Embed iframe</Button>
+    //       </DialogTrigger>
+    //       <DialogContent className="max-w-md">
+    //         <h3 className="text-lg font-semibold mb-2">Embed this iframe</h3>
+    //         <p className="text-sm mb-4">
+    //           Copy the code below to embed this carousel on your site.
+    //         </p>
+    //         <div className="p-2 bg-gray-100 rounded-md text-sm break-all">
+    //           <code>{iframeCode}</code>
+    //         </div>
+    //         <Button variant="secondary" className="mt-2" onClick={handleCopy}>
+    //           {isCopied ? "Copied" : "Copy to clip board"}
+    //         </Button>
+    //       </DialogContent>
+    //     </Dialog>
+    //   </div>
+    // </div>
   );
 }

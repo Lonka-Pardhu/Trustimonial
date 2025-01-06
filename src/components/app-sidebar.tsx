@@ -33,7 +33,7 @@ import {
   SidebarRail,
   SidebarTrigger,
 } from "@/components/ui/sidebar";
-import { navItems } from "@/constants/data";
+import { navItems, NavItem } from "@/constants/data";
 import {
   BadgeCheck,
   Bell,
@@ -51,6 +51,7 @@ import SearchInput from "./ui/search-input";
 // import ThemeToggle from "./ThemeToggle/theme-toggle";
 import { Icons } from "./icons";
 import { UserNav } from "./user-nav";
+import axios from "axios";
 
 export const company = {
   name: "Trustimonial",
@@ -63,6 +64,7 @@ export default function AppSidebar({
 }: {
   children: React.ReactNode;
 }) {
+  const [navData, setNavData] = React.useState<NavItem[]>(navItems);
   const [mounted, setMounted] = React.useState(false);
   const { data: session } = useSession();
   const pathname = usePathname();
@@ -71,6 +73,41 @@ export default function AppSidebar({
     setMounted(true);
   }, []);
 
+  React.useEffect(() => {
+    const fetchBoards = async () => {
+      // setIsLoading(true);
+      try {
+        const res = await axios.get(`/api/space`);
+        if (res?.status === 200) {
+          const boards = res.data?.boards;
+          const updatedNavItems = navData.map((item) => {
+            if (item.title === "Boards") {
+              return {
+                ...item,
+                items: [
+                  ...(item.items || []), // Keep existing items, e.g., "All Boards"
+                  ...boards.map(
+                    (board: { spaceUrlKey: string; title: string }) => ({
+                      title: board.title,
+                      url: `/dashboard/boards/${board.spaceUrlKey}`,
+                    })
+                  ),
+                ],
+              };
+            }
+            return item;
+          });
+
+          setNavData(updatedNavItems);
+        }
+      } catch (error) {
+        console.error("Error fetching boards in app side bar ui:", error);
+      } finally {
+        // setIsLoading(false);
+      }
+    };
+    fetchBoards();
+  }, []);
   if (!mounted) {
     return null; // or a loading skeleton
   }
@@ -93,13 +130,14 @@ export default function AppSidebar({
           <SidebarGroup>
             <SidebarGroupLabel>Overview</SidebarGroupLabel>
             <SidebarMenu>
-              {navItems.map((item) => {
+              {navData.map((item) => {
                 const Icon = item.icon ? Icons[item.icon] : Icons.logo;
                 return item?.items && item?.items?.length > 0 ? (
                   <Collapsible
                     key={item.title}
                     asChild
-                    defaultOpen={item.isActive}
+                    defaultOpen={item.title === "Boards" ? true : item.isActive}
+                    // defaultOpen={item.isActive}
                     className="group/collapsible"
                   >
                     <SidebarMenuItem>
@@ -115,11 +153,12 @@ export default function AppSidebar({
                       </CollapsibleTrigger>
                       <CollapsibleContent>
                         <SidebarMenuSub>
-                          {item.items?.map((subItem) => (
+                          {item.items?.map((subItem, index) => (
                             <SidebarMenuSubItem key={subItem.title}>
                               <SidebarMenuSubButton
                                 asChild
                                 isActive={pathname === subItem.url}
+                                className={index === 0 ? "text-blue-500" : ""}
                               >
                                 <Link href={subItem.url}>
                                   <span>{subItem.title}</span>

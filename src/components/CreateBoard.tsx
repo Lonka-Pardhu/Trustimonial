@@ -1,4 +1,5 @@
 "use client";
+
 import axios from "axios";
 import { useForm } from "react-hook-form";
 import { useState } from "react";
@@ -39,9 +40,18 @@ const CreateBoardForm = () => {
     setError("");
 
     try {
-      const res = await axios.post("/api/space", data, {
+      const formData = new FormData();
+      formData.append("spaceName", data.spaceName);
+      formData.append("title", data.title);
+      formData.append("message", data.message);
+      formData.append("questions", JSON.stringify(questions)); // Convert questions to JSON
+      if (data.logoImage && data.logoImage[0]) {
+        formData.append("file", data.logoImage[0]); // Attach the file
+      }
+
+      const res = await axios.post("/api/space", formData, {
         headers: {
-          "Content-Type": "application/json",
+          "Content-Type": "multipart/form-data",
         },
       });
 
@@ -90,8 +100,26 @@ const CreateBoardForm = () => {
             <DialogTitle>Create your board</DialogTitle>
           </DialogHeader>
           <p className="text-red-500">{error}</p>
-          <form onSubmit={handleSubmit(onSubmit)} className="space-form">
+          <form
+            onSubmit={handleSubmit(onSubmit)}
+            className="space-form"
+            encType="multipart/form-data"
+          >
             <div className="flex flex-col gap-y-1">
+              <div>
+                <Label htmlFor="logoImage">Logo Image</Label>
+                <Input
+                  id="logoImage"
+                  type="file"
+                  {...register("logoImage", { required: false })}
+                  accept="image/*"
+                />
+                {errors.logoImage && (
+                  <small className="text-red-500">
+                    Please upload a valid image
+                  </small>
+                )}
+              </div>
               <div>
                 <Label htmlFor="spaceName">Board Name</Label>
                 <Input
@@ -130,7 +158,7 @@ const CreateBoardForm = () => {
                 {questions.map((question, index) => (
                   <Input
                     key={index}
-                    {...register(`questions[${index}]`, { required: true })} // Register the question fields
+                    {...register(`questions[${index}]`)}
                     value={question}
                     className="mb-1"
                     onChange={(e) =>
@@ -139,12 +167,8 @@ const CreateBoardForm = () => {
                     placeholder={`Question ${index + 1}`}
                   />
                 ))}
-                {errors.questions && (
-                  <small className="text-red-500">
-                    Please fill all questions
-                  </small>
-                )}
               </div>
+
               <DialogFooter>
                 <Button disabled={loading} type="submit">
                   {loading ? (

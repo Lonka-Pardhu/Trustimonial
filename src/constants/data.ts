@@ -1,25 +1,6 @@
 import { Icons } from "@/components/icons";
-// export type User = {
-//   id: number;
-//   name: string;
-//   company: string;
-//   role: string;
-//   verified: boolean;
-//   status: string;
-// };
 
-// export type Product = {
-//   photo_url: string;
-//   name: string;
-//   description: string;
-//   created_at: string;
-//   price: number;
-//   id: number;
-//   category: string;
-//   updated_at: string;
-// };
-
-interface NavItem {
+export interface NavItem {
   title: string;
   url: string;
   disabled?: boolean;
@@ -41,9 +22,9 @@ export const navItems: NavItem[] = [
   },
   {
     title: "Boards",
-    url: "/dashboard/boards",
+    url: "#",
     icon: "user",
     isActive: false,
-    items: [], // No child items
+    items: [{ title: "All boards", url: "/dashboard/boards" }],
   },
 ];

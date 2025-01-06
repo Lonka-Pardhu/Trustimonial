@@ -14,6 +14,7 @@ interface Board {
   _id: string;
   spaceUrlKey: string;
   spaceName: string;
+  logoImage: string;
   submissions: { length: number };
 }
 
@@ -82,6 +83,7 @@ export default function BoardsPage() {
                     key={index}
                     boardUrlKey={item.spaceUrlKey}
                     title={item.spaceName}
+                    logoImage={item.logoImage}
                     testimonialCount={item.submissions.length}
                     onDelete={() => handleDelete(item._id)}
                   />

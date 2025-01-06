@@ -14,7 +14,7 @@ const spaceSchema = new Schema(
       required: true,
     },
     title: { type: String, required: true },
-    // logoImage: { type: String, required: true }, //cloudinary url
+    logoImage: { type: String, required: true }, //cloudinary url
     message: { type: String, required: true },
     questions: { type: [String], required: true }, // Array of questions
     submissions: [

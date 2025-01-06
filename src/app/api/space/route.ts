@@ -5,6 +5,11 @@ import { dbConnect } from "@/lib/db";
 import { auth } from "@/auth";
 import User from "@/models/user.model";
 import Submission from "@/models/submission.model";
+import { uploadImageToCloudinary } from "@/utils/cloudinary";
+import path from "path";
+import fs from "fs";
+
+const UPLOAD_DIR = path.resolve(process.cwd(), "public/uploads");
 
 export async function POST(req: Request) {
   const session = await auth();
@@ -14,13 +19,50 @@ export async function POST(req: Request) {
   }
 
   try {
-    const { spaceName, title, message, questions } = await req.json();
+    // const { spaceName, title, message, questions } = await req.json();
+    const formData = await req.formData();
+    const spaceName = formData.get("spaceName")?.toString() || "";
+    const title = formData.get("title")?.toString() || "";
+    const message = formData.get("message")?.toString() || "";
+    const questions = formData.get("questions")
+      ? JSON.parse(formData.get("questions").toString())
+      : [];
+    const file = formData.get("file") as Blob;
 
     if (!spaceName || !title || !message || !questions || !questions.length) {
       return NextResponse.json(
         { message: "All fields are required" },
         { status: 400 }
       );
+    }
+    let logoUrl = "";
+
+    if (file) {
+      // Convert the file to a Buffer
+      const buffer = Buffer.from(await file.arrayBuffer());
+
+      // Ensure the upload directory exists
+      if (!fs.existsSync(UPLOAD_DIR)) {
+        fs.mkdirSync(UPLOAD_DIR, { recursive: true });
+      }
+
+      // Generate a temporary file path
+      const tempFilePath = path.join(
+        UPLOAD_DIR,
+        `temp-${Date.now()}-${file.name}`
+      );
+      fs.writeFileSync(tempFilePath, buffer);
+
+      // Upload the file to Cloudinary
+      const uploadResult = await uploadImageToCloudinary(tempFilePath, {
+        folder: "spaces",
+      });
+
+      // Save the Cloudinary URL
+      logoUrl = uploadResult.url;
+
+      // Clean up the temporary file
+      fs.unlinkSync(tempFilePath);
     }
 
     await dbConnect();
@@ -46,6 +88,7 @@ export async function POST(req: Request) {
       title,
       message,
       questions,
+      logoImage: logoUrl,
     };
 
     const space = await Space.create(newSpace);
