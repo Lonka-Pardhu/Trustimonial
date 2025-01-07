@@ -19,11 +19,15 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from "@/components/ui/carousel";
+import { CardStack } from "@/components/ui/card-stack";
 
 interface Submission {
+  _id: string;
   name: string;
   email: string;
   description: string;
+  pinned: boolean;
+  rating: number;
 }
 
 export default function EmbedCarousel({
@@ -50,8 +54,8 @@ export default function EmbedCarousel({
   }
 
   return (
-    <div className="w-full flex flex-col items-center justify-center">
-      <Carousel
+    <div className="w-full flex flex-row items-center justify-around">
+      {/* <Carousel
         plugins={[
           Autoplay({
             delay: 2000,
@@ -76,7 +80,10 @@ export default function EmbedCarousel({
           ))}
         </CarouselContent>
         <CarouselNext />
-      </Carousel>
+      </Carousel> */}
+      <div className="w-full max-w-xs">
+        {submissions.length > 1 && <CardStack items={submissions} />}
+      </div>
     </div>
   );
 }

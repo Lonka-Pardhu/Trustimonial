@@ -14,6 +14,7 @@ import { toast } from "sonner";
 import EmbedCarousel from "@/components/EmbedCarousel";
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import StarRating from "@/components/StarRating";
+import { CardStack } from "@/components/ui/card-stack";
 
 interface Submission {
   _id: string;
@@ -128,10 +129,14 @@ export default function Page({ params }: { params: { boardName: string } }) {
         })}
       </div>
       <br />
+      {submissions.length > 0 && <CardStack items={submissions} />}
       <h3 className="pb-2 text-3xl font-semibold tracking-tight first:mt-0">
         Embed {params.boardName} carousel :
       </h3>
       <EmbedCarousel boardName={params.boardName} />
+      {/* <div className="h-[40rem] flex items-center justify-center w-full">
+        <CardStack items={submissions} />
+      </div> */}
       <div className="flex items-center justify-center">
         <Dialog>
           <DialogTrigger asChild>
