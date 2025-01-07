@@ -24,44 +24,52 @@ export async function POST(req: Request) {
     const spaceName = formData.get("spaceName")?.toString() || "";
     const title = formData.get("title")?.toString() || "";
     const message = formData.get("message")?.toString() || "";
-    const questions = formData.get("questions")
-      ? JSON.parse(formData.get("questions").toString())
-      : [];
-    const file = formData.get("file") as Blob;
+    const questions = formData.get("questions");
+    const parsedQuestions = questions ? JSON.parse(questions.toString()) : [];
 
-    if (!spaceName || !title || !message || !questions || !questions.length) {
+    const spaceImage = formData.get("spaceImage") as File;
+
+    if (
+      !spaceName ||
+      !title ||
+      !message ||
+      !questions ||
+      !parsedQuestions.length ||
+      !spaceImage
+    ) {
       return NextResponse.json(
         { message: "All fields are required" },
         { status: 400 }
       );
     }
+
     let logoUrl = "";
 
-    if (file) {
-      // Convert the file to a Buffer
-      const buffer = Buffer.from(await file.arrayBuffer());
+    if (spaceImage) {
+      // Converting the file to a Buffer
+      const buffer = Buffer.from(await spaceImage.arrayBuffer());
 
-      // Ensure the upload directory exists
+      // Ensuring the upload directory exists
       if (!fs.existsSync(UPLOAD_DIR)) {
         fs.mkdirSync(UPLOAD_DIR, { recursive: true });
       }
 
-      // Generate a temporary file path
+      // Generating a temporary file path
       const tempFilePath = path.join(
         UPLOAD_DIR,
-        `temp-${Date.now()}-${file.name}`
+        `temp-${Date.now()}-${spaceImage.name}`
       );
       fs.writeFileSync(tempFilePath, buffer);
 
-      // Upload the file to Cloudinary
+      // Uploading the file to Cloudinary
       const uploadResult = await uploadImageToCloudinary(tempFilePath, {
         folder: "spaces",
       });
 
-      // Save the Cloudinary URL
+      // Saving the Cloudinary URL
       logoUrl = uploadResult.url;
 
-      // Clean up the temporary file
+      // Cleaning up the temporary file
       fs.unlinkSync(tempFilePath);
     }
 
@@ -75,9 +83,9 @@ export async function POST(req: Request) {
     let existingSpace = await Space.findOne({ spaceUrlKey: baseUrlKey });
     let spaceUrlKey = baseUrlKey;
 
-    // If the space name already exists, generate a unique key
+    // If the space name already exists, genertaing a unique key
     if (existingSpace) {
-      const randomSuffix = uuidv4().slice(0, 8); // Use shorter UUID
+      const randomSuffix = uuidv4().slice(0, 8); // Using shorter UUID
       spaceUrlKey = `${baseUrlKey}-${randomSuffix}`;
     }
 
@@ -87,7 +95,7 @@ export async function POST(req: Request) {
       spaceOwner: session.user.id,
       title,
       message,
-      questions,
+      parsedQuestions,
       logoImage: logoUrl,
     };
 

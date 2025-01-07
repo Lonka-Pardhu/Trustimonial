@@ -54,11 +54,15 @@ export default function BoardsPage() {
     }
   };
 
+  const handleAddBoard = (newBoard: Board) => {
+    setBoards((prevBoards) => [newBoard, ...prevBoards]);
+  };
+
   return (
     <main className="flex-1 p-6">
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-3xl font-bold">Your Boards</h1>
-        <CreateBoardForm />
+        <CreateBoardForm onBoardCreated={handleAddBoard} />
       </div>
 
       <Tabs defaultValue="all" className="mb-6">
@@ -94,7 +98,7 @@ export default function BoardsPage() {
             <div className="text-center w-full mt-[20%] flex-col flex gap-y-3 items-center justify-center">
               {" "}
               <p>You don't have any boards yet. Create one to get started.</p>
-              <CreateBoardForm />
+              <CreateBoardForm onBoardCreated={handleAddBoard} />
             </div>
           )}
         </TabsContent>

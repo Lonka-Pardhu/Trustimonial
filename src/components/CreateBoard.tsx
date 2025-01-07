@@ -2,7 +2,7 @@
 
 import axios from "axios";
 import { useForm } from "react-hook-form";
-import { useState } from "react";
+import React, { useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
@@ -19,7 +19,21 @@ import {
 } from "@/components/ui/dialog";
 import { toast } from "sonner";
 
-const CreateBoardForm = () => {
+interface Board {
+  _id: string;
+  spaceUrlKey: string;
+  spaceName: string;
+  logoImage: string;
+  submissions: { length: number };
+}
+
+interface CreateBoardFormProps {
+  onBoardCreated: (newBoard: Board) => void;
+}
+
+const CreateBoardForm: React.FC<CreateBoardFormProps> = ({
+  onBoardCreated,
+}) => {
   const {
     register,
     handleSubmit,
@@ -44,9 +58,9 @@ const CreateBoardForm = () => {
       formData.append("spaceName", data.spaceName);
       formData.append("title", data.title);
       formData.append("message", data.message);
-      formData.append("questions", JSON.stringify(questions)); // Convert questions to JSON
+      formData.append("questions", JSON.stringify(questions));
       if (data.logoImage && data.logoImage[0]) {
-        formData.append("file", data.logoImage[0]); // Attach the file
+        formData.append("spaceImage", data.logoImage[0]);
       }
 
       const res = await axios.post("/api/space", formData, {
@@ -56,6 +70,17 @@ const CreateBoardForm = () => {
       });
 
       if (res.status === 201) {
+        //TODO we need to send space created values in response from /api/space to handle this properly
+        console.log(res);
+        const newBoard = {
+          _id: res.data._id,
+          spaceUrlKey: res.data.urlKey,
+          spaceName: data.spaceName,
+          logoImage: res.data.logoImage,
+          submissions: { length: 0 }, // Assuming no submissions initially
+        };
+        console.log(newBoard);
+        onBoardCreated(newBoard);
         setBoardLink(`${process.env.NEXT_PUBLIC_NEXTAUTH_URL}/${res.data.url}`);
         reset();
         setBoardDailogOpen(false);
